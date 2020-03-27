@@ -2,25 +2,46 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Scoped CSS Variables and JS</title>
+  <title>Update CSS Variables with JS</title>
 </head>
 <body>
-  <h2>Update CSS Variables with <span class='hl'>JS</span></h2>
+  <h4>"Faith is taking the  <span class='highlight'>first step</span> even when you don't see the whole staircase."</h4>
+  <h6>- Martin Luther King, Jr.</h6>
 
   <div class="controls">
-    <label for="spacing">Spacing:</label>
+    <label for="spacing">Border:</label>
+    <!-- The input type "range" creates a slider control -->
     <input id="spacing" type="range" name="spacing" min="10" max="200" value="10" data-sizing="px">
 
     <label for="blur">Blur:</label>
     <input id="blur" type="range" name="blur" min="0" max="25" value="10" data-sizing="px">
 
     <label for="base">Base Color</label>
-    <input id="base" type="color" name="base" value="#ffc600">
+    <!-- The input type "color" opens up a color picker in your window -->
+    <input id="base" type="color" name="base" value="#59c44f">
   </div>
 
-  <img src="https://source.unsplash.com/7bwQXzbF6KE/800x500">
+  <img src='stairs.jpg'>
 
   <style>
+    /* In CSS, you use -- to declare variables*/
+    :root {
+      --base: #59c44f;
+      --spacing: 10px;
+      --blur: 10px;
+    }
+
+    /* To call a variable in CSS, we use var(--nameofvariable) */
+    /* We are using the pre-defined variables and calling them so that their values can be used to manipulate the CSS of our elements */
+    img {
+      padding: var(--spacing);
+      background: var(--base);
+      filter: blur(var(--blur));
+    }
+
+    .highlight {
+      color: var(--base);
+    }
 
     /*
       misc styles, nothing to do with CSS variables
@@ -28,9 +49,9 @@
 
     body {
       text-align: center;
-      background: #193549;
+      background: #2d668f;
       color: white;
-      font-family: 'helvetica neue', sans-serif;
+      font-family: 'verdana', sans-serif;
       font-weight: 100;
       font-size: 50px;
     }
@@ -45,6 +66,20 @@
   </style>
 
   <script>
+    /* The output of querySelector is what is called a Nodelist */
+    /* It seems like an array (e.g. has brackets, length, etc.) but doesn't have all the methods an array does, like mapping */
+    const inputs = document.querySelectorAll('.controls input');
+
+    function handleUpdate() {
+      /* dataset is a object containing all the data attributes from this specific element*/
+      const suffix = this.dataset.sizing || '';
+      document.documentElement.style.setProperty(`--${this.name}`, this.value + suffix);
+      console.log(suffix);
+    }
+
+    inputs.forEach(input => input.addEventListener('change', handleUpdate));
+    inputs.forEach(input => input.addEventListener('mousemove', handleUpdate));
+
   </script>
 
 </body>
